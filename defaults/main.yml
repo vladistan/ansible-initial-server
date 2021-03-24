@@ -127,7 +127,7 @@ iserver_timezone: UTC
 
 # Added to profile in iserver_users_dirs (Debian, Ubuntu)
 iserver_deb_user_profile: |
-  EDITOR=/usr/local/bin/nano
+  EDITOR=/usr/bin/vi
 
 iserver_bashrc_root_debian: |
   export PS1="\[\033[1;31m\][\u@\h:\w]#\[\033[0m\] "
