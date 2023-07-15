@@ -8,8 +8,23 @@
   roles:
     - role: test
       vars:
-        iserver_sshkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDK1zNq5zsVbbN/gLdYqxlb5CROsR1dBNBgRFzzCJUL3ncU2dDHLHWi0L/FafwWt6MQ7vePu7catLDegY2fs1QB0KYvy21fD3+9ONBs7KcFlmuyqjLJ9VAoLWW5Tv3I9eZNgpd9k6CvYphKa1Owq43ye+quQRI4J+2nb7Zhl2WTQ1N2WBwZbmf0ErTHwa+mC7frTRBYh6ddyXp9KRULH89y/6cVpL6uQyFzIr6yWowUbJ8lX3fA9e7RAxkG76X54sMa65oq3Bog04ylJ4n/xZCXO449BZjAZHcJuDcFLXrwIo52t+Q6gIEnXInTiii26/ZWbnzzheggjkpQ77tCg03t christian@Chris-GigaMac.local"
-        iserver_hostname: test
+        iserver_hostname: test-01
         iserver_ssh_banner: /etc/issue.net
-        iserver_timezone: America/Los_Angeles
+        iserver_timezone: America/New_York
         iserver_centos_enable_epel: true
+        iserver_rpm_packages:
+          - wget
+          - curl
+          - htop
+          - ncdu
+          - tmux
+          - pv
+          - vim
+          - lsof
+          - dnsutils
+        iserver_domain: home.v-lad.org
+        iserver_bashrc_user_centos: |
+          export PS1="\[\033[1;34m\][\u@\h:\w]$\[\033[0m\] "
+          export EDITOR=/usr/bin/vim
+        iserver_motd_welcome:
+          echo "V-Lad template: $PRETTY_NAME"
