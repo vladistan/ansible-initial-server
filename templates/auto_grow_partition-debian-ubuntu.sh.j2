@@ -1,0 +1,10 @@
+#!/bin/bash
+# Ansible managed
+# Debian, Ubuntu
+
+growpart -N /dev/sda {{ iserver_root_partition_number }}
+if [ $? -eq 0 ]; then
+    echo "* auto-growing and resizing /dev/sda{{ iserver_root_partition_number }}"
+    growpart /dev/sda {{ iserver_root_partition_number }}
+    resize2fs /dev/sda{{ iserver_root_partition_number }}
+fi
