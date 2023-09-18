@@ -155,6 +155,12 @@
       - never
       - is_template
 
+  - name: Add Elastic Beats repository.
+    import_tasks: beats-debian-ubuntu.yml
+    tags:
+      - vanilla
+      - travis
+
   ## CUSTOMIZE ###
   - name: Timezone.
     import_tasks: timezone-most-distros.yml
