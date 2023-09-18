@@ -1,0 +1,78 @@
+---
+
+- name: Check current crypto policy
+  command: "update-crypto-policies --show"
+  register: current_crypto_policy
+
+- name: Set crypto policy to allow SHA1
+  command: "update-crypto-policies --set DEFAULT:SHA1"
+  when: current_crypto_policy.stdout != "DEFAULT:SHA1"
+
+
+- name: Import Elastic GPG key
+  rpm_key:
+    key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+    state: present
+
+- name: Add Elastic repository
+  yum_repository:
+    name: elastic-7.x
+    description: Elastic repository for 7.x packages
+    baseurl: "https://artifacts.elastic.co/packages/7.x/yum"
+    gpgcheck: yes
+    enabled: yes
+    state: present
+
+- name: Install beats packages (YUM)
+  yum:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ iserver_beats }}'
+
+- name: Create PID Directory
+  file:
+    path: '/var/run'
+    state: directory
+
+- name: Create Config Directory
+  file:
+    path: '/etc/{{ item }}'
+    state: directory
+  loop: '{{ iserver_beats }}'
+
+- name: Setup environment file
+  template:
+    src: beat.env.j2
+    dest: '/etc/default/beats.env'
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Update unit files
+  copy:
+    src: '{{ item }}.service'
+    dest: '/lib/systemd/system/{{ item }}.service'
+    mode: 0644
+    owner: root
+    group: root
+  loop: '{{ iserver_beats }}'
+
+- name: Copy config files
+  copy:
+    src: '{{ item }}'
+    dest: '/etc/{{ item }}'
+    mode: 0644
+    owner: root
+    group: root
+  loop:
+    - metricbeat/metricbeat.yml
+    - metricbeat/modules.d/linux.yml
+    - metricbeat/modules.d/system.yml
+    - filebeat/filebeat.yml
+
+- name: Start {{ beat }} service
+  service:
+    name: '{{ item }}'
+    state: started
+    enabled: true
+  loop: '{{ iserver_beats }}'

@@ -1,0 +1,45 @@
+metricbeat.config.modules:
+  enabled: true
+  path: ${path.config}/modules.d/*.yml
+
+processors:
+  - add_host_metadata: null
+  - add_cloud_metadata: null
+  - drop_fields:
+      fields:
+        - agent.name
+        - agent.id
+        - agent.ephemeral_id
+        - cloud.provider
+        - cloud.region
+        - cloud.account.id
+        - event.module
+        - fsstat
+        - host.hostname
+        - host.id
+        - host.mac
+        - host.os.name
+        - host.os.type
+        - host.os.platform
+        - process.state
+        - process.command_line
+        - process.args
+        - linux.memory.hugepages
+        - system.process.fd.limit.hard
+        - system.process.fd.limit.soft
+        - system.process.cgroup
+        - system.process.state
+        - system.memory.hugepages
+        - system.memory.swap
+output:
+  logstash:
+    hosts:
+      - "${LOGSTASH_HOST:UNKNOWN}:5045"
+queue.disk:
+  max_size: 2GB
+logging.files:
+  filename: metricbeat
+  path: /var/log/beats/
+  rotateeverybytes: 10485760
+logging.level: warning
+logging.to_files: true

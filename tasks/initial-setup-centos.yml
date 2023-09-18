@@ -156,6 +156,12 @@
       - vanilla
       - travis
 
+  - name: Add Elastic Beats repository.
+    import_tasks: beats-centos.yml
+    tags:
+      - vanilla
+      - travis
+
   - name: Customize.
     import_tasks: customize-centos.yml
 

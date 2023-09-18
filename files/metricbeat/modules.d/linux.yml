@@ -1,0 +1,15 @@
+- module: linux
+  period: 1m
+  metricsets:
+    - memory
+    - ksm
+    - iostat
+    - pressure
+  processors:
+    - drop_event.when.regexp:
+        linux.iostat.name: "^(loop)"
+    - drop_event.when.regexp:
+        linux.iostat.name: '^nvme\dn\d+p'
+    - drop_event.when.regexp:
+        linux.iostat.name: '^xvd.\d+'
+  enabled: true

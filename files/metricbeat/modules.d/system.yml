@@ -1,0 +1,36 @@
+- module: system
+  period: 1m
+  metricsets:
+    - cpu
+    - load
+    - network
+    - core
+    - process
+    - process_summary
+    - socket_summary
+  processors:
+    - drop_event.when.regexp:
+        system.diskio.name: "^(loop)"
+    - drop_event.when.regexp:
+        system.diskio.name: '^nvme\dn\d+p'
+    - drop_event.when.regexp:
+        system.network.name: "^(lo)"
+    - drop_event.when:
+        and:
+          - range.system.process.cpu.total.pct.lt: 0.05
+          - range.system.process.memory.rss.pct.lt: 0.05
+    - drop_event.when.has_fields:
+        - host.network.egress.bytes
+
+  process.include_top_n:
+    by_cpu: 5 # include top 5 processes by CPU
+    by_memory: 5 # include top 5 processes by memory
+
+- module: system
+  period: 15m
+  metricsets:
+    - filesystem
+    - uptime
+  processors:
+    - drop_event.when.regexp:
+        system.filesystem.mount_point: "^/(sys|boot|cgroup|proc|dev|etc|host|lib|snap)($|/)"
