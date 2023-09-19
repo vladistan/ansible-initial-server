@@ -1,13 +1,17 @@
 ---
 
-- name: Check current crypto policy
-  command: "update-crypto-policies --show"
-  register: current_crypto_policy
+- name: Configure containerd on RHEL 8.
+  block:
+    - name: Check current crypto policy
+      command: "update-crypto-policies --show"
+      register: current_crypto_policy
 
-- name: Set crypto policy to allow SHA1
-  command: "update-crypto-policies --set DEFAULT:SHA1"
-  when: current_crypto_policy.stdout != "DEFAULT:SHA1"
+    - name: Set crypto policy to allow SHA1
+      command: "update-crypto-policies --set DEFAULT:SHA1"
+      when: current_crypto_policy.stdout != "DEFAULT:SHA1"
 
+  # Only for centos version more than 7
+  when: ansible_distribution_major_version | int >= 8
 
 - name: Import Elastic GPG key
   rpm_key:
