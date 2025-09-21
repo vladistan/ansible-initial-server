@@ -28,3 +28,9 @@
   when: ansible_distribution == 'CentOS'
   tags:
     - centos
+
+- name: Initial Setup - Rocky.
+  import_tasks: initial-setup-rocky.yml
+  when: ansible_distribution == 'Rocky'
+  tags:
+    - centos

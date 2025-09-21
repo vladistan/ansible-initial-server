@@ -223,10 +223,3 @@ iserver_main_disk: sda1
 iserver_verse_enabled: False
 
 iserver_root_partition_number: 1
-
-# Beats
-iserver_logstash_host: logstash.r4.v-lad.org
-
-iserver_beats:
-  - filebeat
-  - metricbeat
