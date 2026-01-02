@@ -30,10 +30,6 @@ echo "==> clearing last login information"
 echo "==> removing tmp files"
 rm -rf /tmp/* /var/tmp/*
 
-echo "==> Zero out the free space to save space in the final image"
-dd if=/dev/zero of=/EMPTY bs=1M  || echo "dd exit code $? is suppressed"
-rm -f /EMPTY
-
 echo "===> Wipe netplan machine-id (DUID) so machines get unique ID generated on boot"
 truncate -s 0 /etc/machine-id
 
